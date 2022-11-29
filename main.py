@@ -1,13 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 
-
 HEADER_FOR_GET_REQUEST = (
     {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0',
      'Accept-Language': 'en-US, en;q=0.5'}
 )
 
-def get_single_listiing():
+
+def get_single_listing():
     data_out_file = open('data_output.txt', 'w')
 
     target_url = 'https://www.amazon.com/dp/B01N1081RO/'
@@ -35,10 +35,8 @@ def get_single_listiing():
 
     data_out_file.write(product_name_str)
 
-
-
     data_out_file.close()
 
 
 if __name__ == '__main__':
-    get_single_listiing()
+    get_single_listing()
