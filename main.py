@@ -7,7 +7,7 @@ HEADER_FOR_GET_REQUEST = (
 )
 
 
-def get_single_listing():
+def get_single_listing_title():
     data_out_file = open('data_output.txt', 'w')
 
     target_url = 'https://www.amazon.com/dp/B01N1081RO/'
@@ -38,5 +38,44 @@ def get_single_listing():
     data_out_file.close()
 
 
+def get_multiple_listings_by_keyword(keywords: str):
+    # wool sweater
+    # wool+sweater
+    base_url = 'https://www.amazon.com/s?k='
+    search_keywords_formatted = keywords.replace(' ', '+')
+    page_parameter = '&page=1'
+    search_url = f'{base_url}{search_keywords_formatted}{page_parameter}'
+    print(search_url)
+
+    response_object = requests.get(search_url, headers=HEADER_FOR_GET_REQUEST)
+    # print(response_object.content)
+
+    soup_format = BeautifulSoup(response_object.content, 'html.parser')
+
+    # print(soup_format)
+    # print()
+    # print(type(soup_format))
+
+    # get the first search result
+    search_result = soup_format.find_all('div', {'class': 's-result-item', 'data-component-type': 's-search-result'})
+    print(type(search_result))
+    # print(search_result[0])
+
+    # ct = 0
+    # for item in search_result:
+    #     print(item)
+    #     print()
+    #     ct += 1
+    # print(ct)
+
+    first_search_result_item = search_result[0]
+
+    first_product_title = first_search_result_item.h2.text
+    print(first_product_title)
+    first_product_rating = first_search_result_item.i.text
+    print(first_product_rating)
+
+
 if __name__ == '__main__':
-    get_single_listing()
+    # get_single_listing_title()
+    get_multiple_listings_by_keyword('wool sweaters')
