@@ -58,7 +58,7 @@ def get_multiple_listings_by_keyword(keywords: str):
 
     # get the first search result
     search_result = soup_format.find_all('div', {'class': 's-result-item', 'data-component-type': 's-search-result'})
-    print(type(search_result))
+    # print(type(search_result))
     # print(search_result[0])
 
     # ct = 0
@@ -68,14 +68,44 @@ def get_multiple_listings_by_keyword(keywords: str):
     #     ct += 1
     # print(ct)
 
-    first_search_result_item = search_result[0]
+    ct = 0
+    for result_item in search_result:
+        first_search_result_item = search_result[ct]
+        ct += 1
 
-    first_product_title = first_search_result_item.h2.text
-    print(first_product_title)
-    first_product_rating = first_search_result_item.i.text
-    print(first_product_rating)
+        first_product_title = first_search_result_item.h2.text
+        print(first_product_title)
+
+        try:
+            first_product_rating = first_search_result_item.i.text
+            print(first_product_rating)
+
+            rating_blocks = first_search_result_item.find_all('span', {'aria-label': True})
+
+            num_ratings = rating_blocks[1]
+            print(num_ratings.text)
+            # for item in num_ratings:
+            #     print(item)
+        except AttributeError:
+            print('No rating')
+
+        try:
+            integer_price = first_search_result_item.find('span', {'class': 'a-price-whole'})
+            decimal_price = first_search_result_item.find('span', {'class': 'a-price-fraction'})
+            price_symbol = first_search_result_item.find('span', {'class': 'a-price-symbol'})
+            print(price_symbol.text + integer_price.text + decimal_price.text)
+        except AttributeError:
+            print('product has no price listed')
+
+        try:
+            product_link = first_search_result_item.h2.a['href']
+            print('https://www.amazon.com' + product_link)
+        except AttributeError:
+            print('no product link')
+
+        print('')
 
 
 if __name__ == '__main__':
     # get_single_listing_title()
-    get_multiple_listings_by_keyword('wool sweaters')
+    get_multiple_listings_by_keyword('switch')
